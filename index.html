@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forest Hounds | One-to-one dog walking in the Forest of Dean</title>
+<meta name="description" content="Solo dog walks and training across the Forest of Dean and Wye Valley. Two-hour slots covering Lydney, Drybrook, Coleford, Monmouth and Goodrich.">
+<meta property="og:title" content="Forest Hounds | One dog at a time, out in the Forest">
+<meta property="og:description" content="Solo dog walks and training across the Forest of Dean and Wye Valley.">
+<meta property="og:url" content="https://www.foresthounds.co.uk/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600&family=Young+Serif&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1C2D1B; --moss:#2F4A2C; --lichen:#E4E9DA; --paper:#F6F8F1;
+  --gorse:#E2B33A; --wye:#3E7BA0; --bark:#7A5A45; --line:#BFC9B2;
+  --display:"Young Serif",Georgia,serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--lichen);color:var(--ink);font:1.0625rem/1.6 var(--body)}
+svg{max-width:100%;height:auto;display:block}
+a{color:var(--moss)}
+:focus-visible{outline:3px solid var(--gorse);outline-offset:3px}
+.wrap{max-width:72rem;margin:0 auto;padding:0 1.5rem}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.15;margin:0 0 .5em}
+h1{font-size:clamp(2.4rem,5.5vw,4rem);letter-spacing:-.01em}
+h2{font-size:clamp(1.8rem,3.5vw,2.5rem)}
+h3{font-size:1.3rem}
+p{margin:0 0 1em;max-width:62ch}
+.todo{background:rgba(226,179,58,.4);outline:1px dashed var(--bark);padding:0 .25em}
+
+/* Header */
+.site{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.25rem 0}
+.logo{font-family:var(--display);font-size:1.6rem;color:var(--ink);text-decoration:none}
+.site nav{display:flex;align-items:center;gap:1.5rem}
+.site nav a:not(.btn){color:var(--ink);text-decoration:none;font-weight:600}
+.site nav a:not(.btn):hover{text-decoration:underline}
+@media(max-width:760px){.site nav a:not(.btn){display:none}}
+
+.btn{display:inline-block;background:var(--gorse);color:var(--ink);font:600 1rem var(--body);padding:.8em 1.4em;border-radius:999px;text-decoration:none;border:2px solid var(--ink);cursor:pointer}
+.btn:hover{background:#EEC75C}
+.btn.ghost{background:transparent}
+.btn.ghost:hover{background:var(--paper)}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:1fr 1.05fr;gap:3rem;align-items:center;padding:2.5rem 0 5rem}
+.hero .lede{font-size:1.2rem}
+.hero .actions{display:flex;flex-wrap:wrap;gap:.75rem;margin:1.75rem 0}
+.facts{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:1.5rem}
+.facts li{border-left:3px solid var(--moss);padding-left:.75rem;font-weight:600;line-height:1.3}
+.facts span{display:block;font-weight:400;font-size:.9rem}
+.map{margin:0;background:var(--paper);border:2px solid var(--ink);border-radius:20px;padding:.5rem}
+.map figcaption{font-size:.9rem;padding:.5rem .75rem .25rem}
+.town circle{transform-box:fill-box;transform-origin:center;animation:pop .45s ease-out both;animation-delay:calc(var(--d) * 140ms + 250ms)}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.town circle{animation:none}html{scroll-behavior:auto}}
+@media(max-width:860px){.hero{grid-template-columns:1fr;padding-bottom:3.5rem}}
+
+/* Sections */
+.band{padding:5rem 0;border-top:2px solid var(--ink)}
+.band.paper{background:var(--paper)}
+
+.slot{display:grid;grid-template-columns:1fr 2fr 1fr;border:2px solid var(--ink);border-radius:16px;overflow:hidden;margin:2.25rem 0 .5rem;background:var(--paper)}
+.slot > div{padding:1.5rem}
+.slot > div + div{border-left:2px solid var(--ink)}
+.slot .walk{background:var(--moss);color:var(--paper)}
+.slot .n{font-family:var(--display);font-size:2rem;line-height:1;display:block;margin-bottom:.5rem}
+.slot .t{font-size:.9rem;font-weight:600;display:block;margin-bottom:.35rem}
+.slot p{margin:0}
+.scale{display:grid;grid-template-columns:1fr 2fr 1fr;font-size:.85rem;font-weight:600}
+.scale span:last-child{display:flex;justify-content:space-between}
+@media(max-width:760px){
+  .slot{grid-template-columns:1fr}
+  .slot > div + div{border-left:0;border-top:2px solid var(--ink)}
+  .scale{display:none}
+}
+
+.split{display:grid;grid-template-columns:1fr 1.2fr;gap:3rem}
+@media(max-width:860px){.split{grid-template-columns:1fr;gap:1.5rem}}
+.points{list-style:none;margin:0;padding:0}
+.points li{border-top:1px solid var(--line);padding:1.1rem 0}
+.points li:last-child{border-bottom:1px solid var(--line)}
+.points h3{margin-bottom:.25rem}
+.points p{margin:0}
+
+.tariff{list-style:none;margin:2rem 0 1.5rem;padding:0;max-width:44rem}
+.tariff li{padding:1rem 0;border-bottom:1px solid var(--line)}
+.tariff .row{display:flex;align-items:baseline;gap:.75rem}
+.tariff .row h3{margin:0}
+.tariff .row i{flex:1;border-bottom:2px dotted var(--bark);transform:translateY(-.3em)}
+.tariff .price{font-family:var(--display);font-size:1.4rem}
+.tariff p{margin:.25rem 0 0;font-size:.95rem}
+
+.towns{list-style:none;margin:0;padding:0;font-family:var(--display);font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.35}
+
+/* Contact */
+form{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem 1.5rem;max-width:48rem;margin-top:2rem}
+.full{grid-column:1/-1}
+label{display:block;font-weight:600;font-size:.95rem;margin-bottom:.35rem}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:.7em .8em}
+textarea{min-height:8rem;resize:vertical}
+.formnote{font-size:.95rem;margin:.25rem 0 0}
+@media(max-width:640px){form{grid-template-columns:1fr}}
+
+footer{background:var(--moss);color:var(--paper);padding:2.5rem 0}
+footer a{color:var(--paper)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
+footer p{margin:0}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="site">
+    <a class="logo" href="#top">Forest Hounds</a>
+    <nav aria-label="Main">
+      <a href="#how">How it works</a>
+      <a href="#prices">Prices</a>
+      <a href="#area">Area</a>
+      <a href="#about">About</a>
+      <a class="btn" href="#contact">Book a meet and greet</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div>
+        <h1>One dog at a time, out in the Forest of Dean.</h1>
+        <p class="lede">Solo walks and training across the Forest and the Wye Valley. I collect your dog, we walk for a full hour, and I bring them home.</p>
+        <div class="actions">
+          <a class="btn" href="#contact">Book a meet and greet</a>
+          <a class="btn ghost" href="#how">See how a walk works</a>
+        </div>
+        <ul class="facts">
+          <li>Your dog only<span>never walked in a group</span></li>
+          <li>Two-hour slots<span>a full hour of walking</span></li>
+          <li>Three dogs a day<span>so spaces are limited</span></li>
+        </ul>
+      </div>
+
+      <figure class="map">
+        <svg viewBox="0 0 500 520" role="img" aria-labelledby="mapT mapD">
+          <title id="mapT">Map of the area Forest Hounds covers</title>
+          <desc id="mapD">Sketch map of the Forest of Dean and Wye Valley showing Goodrich, Drybrook, Monmouth, Coleford and Lydney inside the covered area.</desc>
+          <defs>
+            <pattern id="trees" width="14" height="14" patternUnits="userSpaceOnUse">
+              <circle cx="4" cy="4" r="1.7" fill="#2F4A2C" opacity=".35"/>
+              <circle cx="11" cy="10" r="1.7" fill="#2F4A2C" opacity=".35"/>
+            </pattern>
+          </defs>
+          <rect width="500" height="520" rx="14" fill="#F6F8F1"/>
+          <!-- Severn estuary -->
+          <path d="M520 300 C480 350 450 400 428 440 C408 475 388 505 372 540 L520 540 Z" fill="#CFE0EA"/>
+          <text x="468" y="430" transform="rotate(-58 468 430)" font-family="Figtree,sans-serif" font-size="13" font-style="italic" fill="#3E7BA0">River Severn</text>
+          <!-- Woodland -->
+          <path d="M200 150 C260 120 360 130 420 180 C460 230 440 330 400 390 C360 430 290 420 250 380 C200 340 170 260 200 150 Z" fill="url(#trees)"/>
+          <!-- Contours -->
+          <g fill="none" stroke="#2F4A2C" stroke-opacity=".28" stroke-width="1.5">
+            <path d="M215 170 C280 125 400 150 430 230 C455 310 400 385 320 385 C240 385 190 260 215 170 Z"/>
+            <path d="M250 200 C300 170 380 190 395 250 C410 310 360 350 310 345 C255 340 225 250 250 200 Z"/>
+            <path d="M275 220 C310 200 365 215 372 255 C380 300 345 325 312 322 C275 318 258 250 275 220 Z"/>
+            <path d="M298 240 C320 228 350 238 352 262 C355 290 330 302 312 300 C290 297 284 255 298 240 Z"/>
+          </g>
+          <!-- River Wye -->
+          <path d="M320 -5 C290 40 262 80 252 112 C242 145 218 160 206 180 C192 210 140 222 108 244 C88 262 118 292 148 322 C170 360 150 440 138 525" fill="none" stroke="#3E7BA0" stroke-width="5" stroke-linecap="round"/>
+          <text x="172" y="455" transform="rotate(-84 172 455)" font-family="Figtree,sans-serif" font-size="13" font-style="italic" fill="#3E7BA0">River Wye</text>
+          <!-- Area covered -->
+          <path d="M58 250 C50 180 170 60 270 58 C360 55 452 100 452 170 C456 260 422 420 382 492 C342 522 290 472 250 422 C180 362 68 330 58 250 Z" fill="none" stroke="#7A5A45" stroke-width="2" stroke-dasharray="8 6"/>
+          <!-- North arrow -->
+          <g transform="translate(40 34)" fill="#1C2D1B">
+            <path d="M0 -16 L7 6 L0 1 L-7 6 Z"/>
+            <text y="24" text-anchor="middle" font-family="Figtree,sans-serif" font-weight="600" font-size="13">N</text>
+          </g>
+          <!-- Scale bar: 5 km -->
+          <g font-family="Figtree,sans-serif" font-size="12" fill="#1C2D1B">
+            <text x="421" y="28" text-anchor="middle">5 km</text>
+            <rect x="365" y="36" width="113" height="6" fill="none" stroke="#1C2D1B" stroke-width="1.5"/>
+            <rect x="365" y="36" width="56.5" height="6" fill="#1C2D1B"/>
+          </g>
+          <!-- Towns -->
+          <g font-family="'Young Serif',Georgia,serif" font-size="18" fill="#1C2D1B" paint-order="stroke" stroke="#F6F8F1" stroke-width="5" stroke-linejoin="round">
+            <g class="town" style="--d:1"><circle cx="268" cy="96" r="9" fill="#E2B33A" stroke="#1C2D1B" stroke-width="2.5"/><text x="283" y="102">Goodrich</text></g>
+            <g class="town" style="--d:2"><circle cx="406" cy="151" r="9" fill="#E2B33A" stroke="#1C2D1B" stroke-width="2.5"/><text x="393" y="135" text-anchor="end">Drybrook</text></g>
+            <g class="town" style="--d:3"><circle cx="90" cy="254" r="9" fill="#E2B33A" stroke="#1C2D1B" stroke-width="2.5"/><text x="90" y="286" text-anchor="middle">Monmouth</text></g>
+            <g class="town" style="--d:4"><circle cx="234" cy="302" r="9" fill="#E2B33A" stroke="#1C2D1B" stroke-width="2.5"/><text x="249" y="308">Coleford</text></g>
+            <g class="town" style="--d:5"><circle cx="375" cy="454" r="9" fill="#E2B33A" stroke="#1C2D1B" stroke-width="2.5"/><text x="360" y="460" text-anchor="end">Lydney</text></g>
+          </g>
+        </svg>
+        <figcaption>Dashed line: the area I collect from. Not sure if you're inside it? Ask.</figcaption>
+      </figure>
+    </section>
+  </main>
+</div>
+
+<section class="band paper" id="how">
+  <div class="wrap">
+    <h2>How a two-hour slot works</h2>
+    <p>Every booking is a two-hour slot for your dog alone. Travel is inside the slot, so the walk itself is a full hour.</p>
+    <div class="slot">
+      <div>
+        <span class="n">1</span>
+        <span class="t">Pick-up, about 30 minutes</span>
+        <p>I collect your dog from home and drive to a walk that suits them: open forest, riverside or quiet lanes.</p>
+      </div>
+      <div class="walk">
+        <span class="n">2</span>
+        <span class="t">The walk, one hour</span>
+        <p>A full hour out, on or off lead depending on your dog's recall. Any training goals get worked on as we go.</p>
+      </div>
+      <div>
+        <span class="n">3</span>
+        <span class="t">Home, about 30 minutes</span>
+        <p>Back home, towelled off, fresh water down, and a message to you on how it went.</p>
+      </div>
+    </div>
+    <div class="scale" aria-hidden="true"><span>0:00</span><span>0:30</span><span><span>1:30</span><span>2:00</span></span></div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap split">
+    <div>
+      <h2>Why one dog at a time</h2>
+      <p>Group walks often mean four or more dogs at once. I don't do that. Your dog gets my full attention for the whole hour, and I take no more than three dogs a day, four or five days a week.</p>
+    </div>
+    <ul class="points">
+      <li><h3>Full attention</h3><p>No juggling leads. I'm watching your dog, not a pack.</p></li>
+      <li><h3>Suits nervous and reactive dogs</h3><p>No other dogs in the car or on the walk, so there's nothing to set them off.</p></li>
+      <li><h3>Training that sticks</h3><p>Recall, loose-lead walking and manners, practised the same way walk after walk.</p></li>
+      <li><h3>The same person every time</h3><p>Your dog gets to know me, and I get to know your dog.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="band paper" id="prices">
+  <div class="wrap">
+    <h2>Prices</h2>
+    <ul class="tariff">
+      <li>
+        <div class="row"><h3>Solo walk</h3><i></i><span class="price"><span class="todo">£00</span></span></div>
+        <p>Two-hour slot including pick-up and drop-off, with one hour of walking.</p>
+      </li>
+      <li>
+        <div class="row"><h3>Solo walk with training</h3><i></i><span class="price"><span class="todo">£00</span></span></div>
+        <p>The same slot, with a set training goal we work on each week.</p>
+      </li>
+      <li>
+        <div class="row"><h3>Meet and greet</h3><i></i><span class="price">Free</span></div>
+        <p>I visit you at home first to meet your dog and talk through what they need.</p>
+      </li>
+    </ul>
+    <p>Regular weekly slots are booked first, so if you want a fixed day, get in touch early.</p>
+  </div>
+</section>
+
+<section class="band" id="area">
+  <div class="wrap split">
+    <div>
+      <h2>Where I walk</h2>
+      <p>I cover the Forest of Dean and the Wye Valley, collecting from homes in and around:</p>
+    </div>
+    <div>
+      <ul class="towns">
+        <li>Lydney</li>
+        <li>Drybrook</li>
+        <li>Coleford</li>
+        <li>Monmouth</li>
+        <li>Goodrich</li>
+      </ul>
+      <p style="margin-top:1rem">Live in a village between them? Ask. If it's on the way, I can usually fit you in.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band paper" id="about">
+  <div class="wrap">
+    <h2>About me</h2>
+    <p>I'm David. <span class="todo">Add a line or two about your experience with dogs: dogs you've had, any training background, and why you started Forest Hounds.</span></p>
+    <p>I've spent my working life in hospitality and events management, looking after people, plans and safety. Turning up on time and doing what I said I'd do is the job.</p>
+    <p><span class="todo">Add: public liability insurance provider, canine first aid certificate, DBS check if you have one.</span></p>
+  </div>
+</section>
+
+<section class="band" id="contact">
+  <div class="wrap">
+    <h2>Book a meet and greet</h2>
+    <p>Tell me about your dog and I'll get back to you to arrange a visit.</p>
+    <form id="enquiry">
+      <div><label for="name">Your name</label><input id="name" name="name" autocomplete="name" required></div>
+      <div><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
+      <div><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+      <div>
+        <label for="town">Where you live</label>
+        <select id="town" name="town" required>
+          <option value="">Choose a town</option>
+          <option>Lydney</option><option>Drybrook</option><option>Coleford</option>
+          <option>Monmouth</option><option>Goodrich</option><option>Somewhere nearby</option>
+        </select>
+      </div>
+      <div><label for="dog">Dog's name</label><input id="dog" name="dog" required></div>
+      <div><label for="breed">Breed and age</label><input id="breed" name="breed"></div>
+      <div class="full">
+        <label for="service">What you're after</label>
+        <select id="service" name="service">
+          <option>Solo walks</option><option>Solo walks with training</option><option>Not sure yet</option>
+        </select>
+      </div>
+      <div class="full"><label for="notes">Anything I should know</label><textarea id="notes" name="notes" placeholder="Recall, how they are with other dogs, days and times that suit you"></textarea></div>
+      <div class="full">
+        <button class="btn" type="submit">Send enquiry</button>
+        <p class="formnote">This opens your email app with your details filled in. Prefer to write yourself? Email <a href="mailto:hello@foresthounds.co.uk">hello@foresthounds.co.uk</a>.</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Forest Hounds: one-to-one dog walking and training in the Forest of Dean</p>
+    <p><a href="mailto:hello@foresthounds.co.uk">hello@foresthounds.co.uk</a></p>
+    <p>&copy; 2026 Forest Hounds</p>
+  </div>
+</footer>
+
+<script>
+document.getElementById('enquiry').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var f = new FormData(this);
+  var g = function (k) { return (f.get(k) || '').toString().trim(); };
+  var body = [
+    'Name: ' + g('name'),
+    'Phone: ' + g('phone'),
+    'Email: ' + g('email'),
+    'Town: ' + g('town'),
+    "Dog's name: " + g('dog'),
+    'Breed and age: ' + g('breed'),
+    'Interested in: ' + g('service'),
+    '',
+    g('notes')
+  ].join('\n');
+  window.location.href = 'mailto:hello@foresthounds.co.uk'
+    + '?subject=' + encodeURIComponent('Meet and greet enquiry: ' + g('dog'))
+    + '&body=' + encodeURIComponent(body);
+});
+</script>
+</body>
+</html>
