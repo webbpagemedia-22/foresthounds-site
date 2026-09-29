@@ -95,7 +95,7 @@ textarea{min-height:8rem;resize:vertical}
 img{max-width:100%;height:auto;display:block}
 .photo-band{margin:0;border-top:2px solid var(--ink)}
 .photo-band img{width:100%;height:clamp(20rem,50vw,52rem);object-fit:cover;object-position:55% 75%}
-.photo-band figcaption{padding:.75rem 0;font-size:.95rem}
+.photo-band figcaption{padding:.75rem 1.5rem;font-size:.95rem;text-align:center}
 .photo{margin:0}
 .photo img{border:2px solid var(--ink);border-radius:16px;width:100%}
 .photo figcaption{font-size:.95rem;padding-top:.5rem}
