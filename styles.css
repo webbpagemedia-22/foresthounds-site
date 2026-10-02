@@ -29,6 +29,7 @@ p{margin:0 0 1em;max-width:62ch}
 .site nav a:not(.btn){color:var(--ink);text-decoration:none;font-weight:600}
 .site nav a:not(.btn):hover{text-decoration:underline}
 @media(max-width:760px){.site nav a:not(.btn){display:none}}
+@media(min-width:761px) and (max-width:1079px){.site{flex-wrap:wrap}.site nav{flex-wrap:wrap;gap:.5rem 1.25rem}}
 
 .btn{display:inline-block;background:var(--gorse);color:var(--ink);font:600 1rem var(--body);padding:.8em 1.4em;border-radius:999px;text-decoration:none;border:2px solid var(--ink);cursor:pointer}
 .btn:hover{background:#EEC75C}
@@ -123,3 +124,21 @@ footer p{margin:0}
 .gallery .photo{break-inside:avoid;margin-bottom:1.5rem}
 .gallery a{display:block;border-radius:16px}
 .gallery a:hover img{opacity:.92}
+
+/* Blog */
+.posts{list-style:none;margin:0;padding:0 0 5rem;display:grid;gap:1.5rem}
+.post-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:1.5rem;align-items:center;background:var(--paper);border:2px solid var(--ink);border-radius:16px;overflow:hidden;color:var(--ink);text-decoration:none}
+.post-card img{width:100%;height:100%;min-height:14rem;object-fit:cover}
+.post-card > div{padding:1.5rem 1.5rem 1.5rem 0}
+.post-card h2{font-size:clamp(1.5rem,3vw,2rem)}
+.post-card:hover h2{text-decoration:underline}
+.post-card .more{font-weight:600;color:var(--moss)}
+@media(max-width:640px){.post-card{grid-template-columns:1fr;gap:0}.post-card > div{padding:1.25rem}}
+time{display:block;font-size:.9rem;font-weight:600;color:var(--bark);margin-bottom:.35rem}
+.post{max-width:44rem;padding:1rem 0 5rem}
+.post .back{font-size:.95rem}
+.post .photo{margin:1.5rem 0 2rem}
+.post h2{margin-top:1.5em;font-size:clamp(1.5rem,3vw,2rem)}
+.post ul{padding-left:1.25rem;max-width:62ch}
+.post li{margin-bottom:.6em}
+.post .cta{margin-top:2rem}
