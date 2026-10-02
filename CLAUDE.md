@@ -7,6 +7,10 @@
 - Never merge. David checks the preview and merges himself.
 - Site is static HTML: index.html, gallery.html, styles.css, images/,
   functions/_middleware.js. No build step, no frameworks.
+- Blog: blog/index.html lists the posts, newest first. Each post is one
+  file, blog/<slug>.html, served at /blog/<slug>. Copy the newest post
+  as the template, use root-relative paths (/styles.css, /images/...),
+  and add the post to the list in blog/index.html.
 - British English. Keep the existing design, fonts and colours.
 - Resize new photos to max 1800px wide and strip location data before
   adding them.
