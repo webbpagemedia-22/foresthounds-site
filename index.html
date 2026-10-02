@@ -261,9 +261,10 @@
         </select>
       </div>
       <div class="full"><label for="notes">Anything I should know</label><textarea id="notes" name="notes" placeholder="Recall, how they are with other dogs, days and times that suit you"></textarea></div>
+      <div class="hp" aria-hidden="true"><label for="website">Leave this empty</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
       <div class="full">
         <button class="btn" type="submit">Send enquiry</button>
-        <p class="formnote">This opens your email app with your details filled in. Prefer to write yourself? Email <a href="mailto:hello@foresthounds.co.uk">hello@foresthounds.co.uk</a>.</p>
+        <p class="formnote" id="formnote">I keep a copy of your enquiry so I can reply and arrange your visit. It isn't shared with anyone. Prefer to write yourself? Email <a href="mailto:hello@foresthounds.co.uk">hello@foresthounds.co.uk</a>.</p>
       </div>
     </form>
   </div>
@@ -280,7 +281,25 @@
 <script>
 document.getElementById('enquiry').addEventListener('submit', function (e) {
   e.preventDefault();
-  var f = new FormData(this);
+  var form = this;
+  var button = form.querySelector('button');
+  var f = new FormData(form);
+  button.disabled = true;
+  button.textContent = 'Sending…';
+  fetch('/api/enquiry', { method: 'POST', body: f })
+    .then(function (res) {
+      if (!res.ok) throw new Error(res.status);
+      form.innerHTML = '<p class="full" role="status"><strong>Thank you, your enquiry has been sent.</strong> I\'ll be in touch soon to arrange a meet and greet.</p>';
+    })
+    .catch(function () {
+      // If saving fails, fall back to opening the visitor's email app.
+      button.disabled = false;
+      button.textContent = 'Send enquiry';
+      openEmail(f);
+    });
+});
+
+function openEmail(f) {
   var g = function (k) { return (f.get(k) || '').toString().trim(); };
   var body = [
     'Name: ' + g('name'),
@@ -296,7 +315,7 @@ document.getElementById('enquiry').addEventListener('submit', function (e) {
   window.location.href = 'mailto:hello@foresthounds.co.uk'
     + '?subject=' + encodeURIComponent('Meet and greet enquiry: ' + g('dog'))
     + '&body=' + encodeURIComponent(body);
-});
+}
 </script>
 </body>
 </html>

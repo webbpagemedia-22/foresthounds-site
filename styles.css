@@ -94,6 +94,7 @@ label{display:block;font-weight:600;font-size:.95rem;margin-bottom:.35rem}
 input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:.7em .8em}
 textarea{min-height:8rem;resize:vertical}
 .formnote{font-size:.95rem;margin:.25rem 0 0}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 @media(max-width:640px){form{grid-template-columns:1fr}}
 
 img{max-width:100%;height:auto;display:block}
