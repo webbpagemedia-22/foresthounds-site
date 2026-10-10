@@ -141,6 +141,7 @@ never conflict, and can be merged in any order.
 {
   "url": "https://www.foresthounds.co.uk/blog/<slug>",
   "image": "https://www.foresthounds.co.uk/images/<file>.jpg",
+  "image_alt": "Alt text for the photo (Buffer requires it)",
   "text": {
     "facebook": "Plain text, up to 500 characters, ending with the link."
   }
