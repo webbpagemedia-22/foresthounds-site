@@ -1,7 +1,7 @@
 # Weekly headline blog post: design
 
 Date: 10 October 2026
-Status: Draft for David's review
+Status: Approved 10 October 2026
 
 ## 1. Purpose
 
@@ -142,9 +142,7 @@ never conflict, and can be merged in any order.
   "url": "https://www.foresthounds.co.uk/blog/<slug>",
   "image": "https://www.foresthounds.co.uk/images/<file>.jpg",
   "text": {
-    "facebook": "Plain text, up to 500 characters, ending with the link.",
-    "instagram": "Plain text, up to 2,000 characters, ending 'Link in bio'. Up to 5 relevant hashtags.",
-    "tiktok": "Plain text, up to 2,000 characters, ending 'Link in bio'."
+    "facebook": "Plain text, up to 500 characters, ending with the link."
   }
 }
 ```
@@ -213,14 +211,12 @@ The agent never merges and never pushes to `main`.
 
 ```json
 [
-  { "id": "6ab95608ea19ca0bde0643f6", "service": "facebook",  "name": "Forest Hounds" },
-  { "id": "6a90b2a0ccaf649a672cbea3", "service": "instagram", "name": "wtfuk2026" },
-  { "id": "6a90acfcccaf649a672ca919", "service": "tiktok",    "name": "adventureswithfudge" }
+  { "id": "6ab95608ea19ca0bde0643f6", "service": "facebook", "name": "Forest Hounds" }
 ]
 ```
 
-These are the three channels connected to Buffer on 10 October 2026. David
-confirms this list during spec review (see section 8).
+Facebook only for now. Adding a channel later means adding an entry here
+and a matching key under `text` in the agent instructions (section 8).
 
 ### 4.8 Keeping internal files off the website
 
@@ -268,21 +264,17 @@ path ending in `.social.json`.
    still return 200.
 2. **Buffer Action dry run:** run manually against a test `.social.json` on
    a branch and check the printed payload for each channel.
-3. **Buffer live test:** one real post to the queue for Facebook only, then
-   delete it from Buffer.
+3. **Buffer live test:** one real post to the Facebook queue, then delete
+   it from Buffer.
 4. **Routine trial run:** one manual "Run now". Review the three PRs and
    the photo library PR together; adjust `automation/weekly-headline.md`.
 5. **First real week:** watch the first merge through to the Buffer queue.
 
-## 8. Open points for David to confirm in review
+## 8. Decisions from review (10 October 2026)
 
-1. **Channels.** Buffer has three channels: Facebook "Forest Hounds",
-   Instagram "wtfuk2026" and TikTok "adventureswithfudge". The Instagram
-   and TikTok names don't look like Forest Hounds accounts. Should the
-   headline go to all three?
-2. **TikTok.** TikTok is built for video. A single photo with text may be
-   accepted as a photo post, or rejected; this is checked in test 3. If
-   rejected, TikTok is dropped from the headline.
-3. **Buffer plan limit.** The current plan allows 10 scheduled posts at
-   once. One headline a week plus manual posts should fit, but a full
-   queue will make the Action fail (see section 5).
+1. **Channels:** Facebook "Forest Hounds" only. Instagram ("wtfuk2026") and
+   TikTok ("adventureswithfudge") are not used for the headline.
+2. **TikTok:** dropped.
+3. **Buffer plan limit:** the plan allows 10 scheduled posts at once. If the
+   queue is full, the Action fails and David re-runs it after freeing a slot
+   (section 5).
