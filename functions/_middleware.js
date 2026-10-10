@@ -8,8 +8,8 @@ export async function onRequest(context) {
     url.port = "";
     return Response.redirect(url.toString(), 301);
   }
-  // The photo library holds blog photo candidates; keep it off the website.
-  if (url.pathname.startsWith("/photo-library/")) {
+  // Photo candidates and internal docs aren't part of the website.
+  if (url.pathname.startsWith("/photo-library/") || url.pathname.startsWith("/docs/")) {
     return new Response("Not found", { status: 404 });
   }
   return context.next();
