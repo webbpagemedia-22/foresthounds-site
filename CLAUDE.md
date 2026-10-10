@@ -14,3 +14,8 @@
 - British English. Keep the existing design, fonts and colours.
 - Resize new photos to max 1800px wide and strip location data before
   adding them.
+- Weekly headline post: `automation/` holds the Sunday headline system.
+  The cloud routine follows `automation/weekly-headline.md`, and merging
+  an option sends it to Buffer (.github/workflows/headline-to-buffer.yml).
+  `automation/`, `docs/`, `photo-library/` and `*.social.json` aren't
+  served on the website.
