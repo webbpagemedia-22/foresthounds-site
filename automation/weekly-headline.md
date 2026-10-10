@@ -34,10 +34,14 @@ Today's date (Europe/London) is the post date for all three options. Call it
 1. `python automation/photos.py untidied` lists photos with no
    `photo-library/photos.json` entry. If it prints nothing, skip to step 2.
 2. On a branch `photo-library/DATE`, for each listed photo:
-   - Before cleaning, note whether it has location data (Pillow:
-     `Image.open(p).getexif().get_ifd(0x8825)` is non-empty).
-   - `python automation/photos.py clean photo-library/<file> photo-library/<file>`
-   - Look at the photo and add an entry to `photos.json`:
+   - Before cleaning, note whether it has location data:
+     `python -c "import sys; sys.path.insert(0, 'automation'); import photos; from PIL import Image; print(bool(Image.open(sys.argv[1]).getexif().get_ifd(0x8825)))" photo-library/<file>`
+   - Clean it. The output is always a JPEG, so a `.jpg`/`.jpeg` file keeps
+     its name, and anything else (`.heic`, `.png`) becomes `<name>.jpg`
+     with the original removed (`git rm`):
+     `python automation/photos.py clean photo-library/<file> photo-library/<name>.jpg`
+   - Look at the photo and add an entry to `photos.json` using the cleaned
+     file's name:
      `{"file", "description", "alt", "tags"}`. The description says what's in
      it (dog, place, season, light, mood) in one line. Alt text is a plain
      sentence for screen readers. Tags are lowercase words: season, dog
@@ -46,8 +50,11 @@ Today's date (Europe/London) is the post date for all three options. Call it
    description. If any photo had location data, start the PR description
    with **"⚠️ N photos had location data. It's been removed in this PR, but
    the originals are still in the repository history."**
-4. Return to `main` for step 2. The cleaned photos and their descriptions
-   are still available to you for this run.
+4. Return to `main` for step 2. For the rest of this run, read photo
+   descriptions and cleaned photos from the `photo-library/DATE` branch
+   (`git show photo-library/DATE:photo-library/photos.json`,
+   `git show photo-library/DATE:photo-library/<file> > /tmp/<file>`), since
+   they aren't on `main` yet.
 
 ## 2. Research
 
@@ -121,13 +128,15 @@ For each story, on its own branch `headline/DATE/<slug>` from `main`:
 
 1. `python automation/photos.py recent` lists library photos used in the
    last 6 weeks. Don't use those.
-2. Read `photo-library/photos.json` (including photos tidied in step 1).
+2. Read `photo-library/photos.json`, from the `photo-library/DATE` branch if
+   step 1 made one.
    Pick the photo whose description and tags best fit the story and season.
    Use each photo for at most one of this week's three options.
 3. If one fits reasonably, run
    `python automation/photos.py clean photo-library/<file> images/library-<file>`
-   and use `/images/library-<file>`. Keep the `library-` prefix exactly; it
-   is how recently used photos are tracked.
+   and use `/images/library-<file>`. Library files are always `.jpg` or
+   `.jpeg` after step 1. Keep the `library-` prefix and the file name
+   exactly; that's how recently used photos are tracked.
 4. If nothing fits, generate an image with Canva's image generation:
    realistic, natural-light photograph style; Forest of Dean mixed woodland
    in the current season; no recognisable people; no text; any dog is a
@@ -148,8 +157,10 @@ For each option:
 - Label: `weekly-headline`.
 - Description, in this order:
   1. **Why this story, this week:** one or two sentences.
-  2. **Preview:** the Cloudflare preview link. Wait up to 15 minutes for it
-     to appear on the PR; if it doesn't, say "Preview not ready yet".
+  2. **Preview:** the preview only exists once the PR is open. Open the PR
+     with "Preview: coming shortly", wait up to 15 minutes for Cloudflare's
+     preview link to appear on it, then edit the description to include
+     the link. If it doesn't appear, say "Preview not ready yet".
   3. **Facebook post:** the social text exactly as it will appear.
   4. **Photo:** which photo, and why it fits, or why an AI image was used.
   5. **Sources:** every source used, as links.

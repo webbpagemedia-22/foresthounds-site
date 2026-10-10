@@ -1,8 +1,10 @@
 import json
+import subprocess
 import sys
 from datetime import date, timedelta
 from pathlib import Path
 
+import pytest
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -80,3 +82,31 @@ def test_recently_used_window(tmp_path):
     (blog / "index.html").write_text("<p>no date</p>")
 
     assert recently_used(blog, today) == {"IMG_1.jpeg"}
+
+
+def test_jpeg_comment_removed(tmp_path):
+    src = tmp_path / "comment.jpeg"
+    Image.new("RGB", (100, 100)).save(src, "JPEG", comment=b"secret comment")
+    dest = tmp_path / "out.jpg"
+    clean_image(src, dest)
+    assert b"secret comment" not in dest.read_bytes()
+
+
+def test_heic_photo_cleaned(tmp_path):
+    from pillow_heif import register_heif_opener
+    register_heif_opener()
+    src = tmp_path / "phone.heic"
+    Image.new("RGB", (2400, 1800), (90, 120, 60)).save(src, "HEIF")
+    dest = tmp_path / "phone.jpg"
+    # A fresh interpreter, as the agent runs it: photos.py must load HEIC support itself.
+    script = Path(__file__).resolve().parents[1] / "photos.py"
+    subprocess.run([sys.executable, str(script), "clean", str(src), str(dest)], check=True)
+    assert Image.open(dest).format == "JPEG"
+    assert Image.open(dest).size == (1800, 1350)
+
+
+def test_non_jpeg_destination_refused(tmp_path):
+    src = tmp_path / "a.jpeg"
+    make_jpeg(src, (100, 100))
+    with pytest.raises(ValueError, match=".jpg"):
+        clean_image(src, tmp_path / "a.png")

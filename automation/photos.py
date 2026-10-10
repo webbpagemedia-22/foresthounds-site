@@ -13,6 +13,9 @@ from datetime import date, timedelta
 from pathlib import Path
 
 from PIL import Image, ImageOps
+from pillow_heif import register_heif_opener
+
+register_heif_opener()  # iPhone photos are often HEIC
 
 ROOT = Path(__file__).resolve().parents[1]
 LIBRARY = ROOT / "photo-library"
@@ -26,11 +29,15 @@ LIBRARY_IMAGE = re.compile(r"/images/library-([^\"'\s)]+)")
 
 def clean_image(src: Path, dest: Path, max_width: int = 1800) -> tuple[int, int]:
     """Save an upright, metadata-free JPEG no wider than max_width. src may equal dest."""
+    if Path(dest).suffix.lower() not in {".jpg", ".jpeg"}:
+        raise ValueError(f"{dest}: the output is always a JPEG, so name it .jpg")
     with Image.open(src) as original:
         im = ImageOps.exif_transpose(original).convert("RGB")
     if im.width > max_width:
         im = im.resize((max_width, round(im.height * max_width / im.width)), Image.LANCZOS)
-    # Saving without exif= or icc_profile= writes no metadata at all.
+    # Pillow re-writes some info (such as a JPEG comment) on save, so clear it;
+    # with no exif= or icc_profile= either, no metadata is written at all.
+    im.info = {}
     im.save(dest, "JPEG", quality=85, optimize=True, progressive=True)
     return im.size
 

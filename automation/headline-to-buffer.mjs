@@ -7,7 +7,8 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync, existsSync } from "node:fs";
 import { parseArgs } from "node:util";
-import { addedSocialFiles, validateSocial, buildPostInput, waitForLive, sendPost } from "./buffer.mjs";
+import { basename } from "node:path";
+import { addedSocialFiles, validateSocial, buildPostInput, sendHeadlines, rerunProblem } from "./buffer.mjs";
 
 const { values: args } = parseArgs({
   options: {
@@ -22,6 +23,12 @@ const channels = JSON.parse(readFileSync(new URL("./buffer-channels.json", impor
 const run = (cmd, cmdArgs) => execFileSync(cmd, cmdArgs, { encoding: "utf8" });
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const rerun = rerunProblem(process.env, Boolean(args.file));
+if (rerun) {
+  console.error(rerun);
+  process.exit(1);
+}
+
 const files = args.file ? [args.file] : addedSocialFiles(run("git", ["diff", "--name-status", args.before, args.after]));
 if (files.length === 0) {
   console.log("No new headline posts in this change. Nothing to send.");
@@ -29,7 +36,8 @@ if (files.length === 0) {
 }
 
 const posts = files.map((path) => ({ path, social: JSON.parse(readFileSync(path, "utf8")) }));
-const invalid = posts.flatMap(({ path, social }) => validateSocial(social, channels).map((p) => `${path}: ${p}`));
+const slugOf = (path) => (path.startsWith("blog/") ? basename(path, ".social.json") : undefined);
+const invalid = posts.flatMap(({ path, social }) => validateSocial(social, channels, slugOf(path)).map((p) => `${path}: ${p}`));
 if (invalid.length) {
   console.error(`Not sending anything. Problems found:\n- ${invalid.join("\n- ")}`);
   process.exit(1);
@@ -50,30 +58,20 @@ function closeOtherOptions(date) {
   }
 }
 
-let failed = false;
-for (const { path, social } of posts) {
-  console.log(`\n${path}\n${social.url}`);
-  if (dryRun) {
-    for (const channel of channels) console.log(`[dry run] ${channel.name} (${channel.service}):\n${JSON.stringify(buildPostInput(social, channel), null, 2)}`);
-    continue;
-  }
-  const date = postDate(path);
-  if (date) closeOtherOptions(date);
-  try {
-    await waitForLive([social.url, social.image], { fetch, sleep });
-  } catch (err) {
-    console.error(err.message);
-    failed = true;
-    continue;
-  }
-  for (const channel of channels) {
-    try {
-      const id = await sendPost(buildPostInput(social, channel), { apiKey: process.env.BUFFER_API_KEY, fetch });
-      console.log(`Queued in Buffer for ${channel.name} (${channel.service}): post ${id}`);
-    } catch (err) {
-      console.error(`Failed for ${channel.name} (${channel.service}): ${err.message}`);
-      failed = true;
-    }
-  }
+if (dryRun) {
+  for (const { path, social } of posts)
+    for (const channel of channels)
+      console.log(`[dry run] ${path} → ${channel.name} (${channel.service}):\n${JSON.stringify(buildPostInput(social, channel), null, 2)}`);
+  process.exit(0);
 }
+
+const { failed } = await sendHeadlines(posts, channels, {
+  fetch,
+  sleep,
+  apiKey: process.env.BUFFER_API_KEY,
+  closeOtherOptions: (path) => {
+    const date = postDate(path);
+    if (date) closeOtherOptions(date);
+  },
+});
 process.exit(failed ? 1 : 0);

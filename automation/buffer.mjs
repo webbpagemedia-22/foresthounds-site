@@ -36,9 +36,11 @@ export function addedSocialFiles(diffNameStatus) {
 }
 
 // Problems with a .social.json file; an empty list means it can be sent.
-export function validateSocial(social, channels) {
+// With a slug (from the file name), the url must be that post's own address.
+export function validateSocial(social, channels, slug) {
   const problems = [];
   if (!social.url?.startsWith(`${SITE}/blog/`)) problems.push(`url must start ${SITE}/blog/`);
+  else if (slug && social.url !== `${SITE}/blog/${slug}`) problems.push(`url must be ${SITE}/blog/${slug}`);
   if (!social.image?.startsWith(`${SITE}/images/`)) problems.push(`image must start ${SITE}/images/`);
   if (!social.image_alt?.trim()) problems.push("image_alt is missing");
   for (const { service } of channels) {
@@ -49,7 +51,7 @@ export function validateSocial(social, channels) {
     }
     if (MAX_LENGTH[service] && text.length > MAX_LENGTH[service])
       problems.push(`${service} text is ${text.length} characters (max ${MAX_LENGTH[service]})`);
-    if (social.url && !text.includes(social.url)) problems.push(`${service} text doesn't include the post link`);
+    if (social.url && !text.trimEnd().endsWith(social.url)) problems.push(`${service} text must end with the post link`);
   }
   return problems;
 }
@@ -93,4 +95,45 @@ export async function sendPost(input, { apiKey, fetch }) {
   if (result?.__typename !== "PostActionSuccess")
     throw new Error(`Buffer ${result?.__typename ?? "error"}: ${result?.message ?? "no message"}`);
   return result.post.id;
+}
+
+// An automatic run re-run from GitHub would re-send posts that already went
+// through, so it's refused in favour of sending the one file by hand.
+export function rerunProblem(env, sendingOneFile) {
+  if (sendingOneFile || Number(env.GITHUB_RUN_ATTEMPT ?? 1) <= 1) return null;
+  return "This run has already been tried, so some posts may already be in Buffer. " +
+    "Check the earlier run's log, then use Actions → Headline to Buffer → Run workflow " +
+    "with the file that failed (e.g. blog/<slug>.social.json).";
+}
+
+// Waits for each post to be live, queues it on every channel, then closes
+// that week's other options. Returns { failed } and logs every outcome.
+export async function sendHeadlines(posts, channels, { fetch, sleep, apiKey, closeOtherOptions, logger = console, waitOptions = {} }) {
+  let failed = false;
+  for (const { path, social } of posts) {
+    logger.log(`\n${path}\n${social.url}`);
+    try {
+      await waitForLive([social.url, social.image], { fetch, sleep, ...waitOptions });
+    } catch (err) {
+      logger.error(err.message);
+      failed = true;
+      continue;
+    }
+    for (const channel of channels) {
+      try {
+        const id = await sendPost(buildPostInput(social, channel), { apiKey, fetch });
+        logger.log(`Queued in Buffer for ${channel.name} (${channel.service}): post ${id}`);
+      } catch (err) {
+        logger.error(`Failed for ${channel.name} (${channel.service}): ${err.message}`);
+        failed = true;
+      }
+    }
+    try {
+      closeOtherOptions(path);
+    } catch (err) {
+      logger.error(`Couldn't close the other options (close them by hand): ${err.message}`);
+      failed = true;
+    }
+  }
+  return { failed };
 }

@@ -94,3 +94,50 @@ test("sendPost throws Buffer's error message", async () => {
   const http = async () => response(500);
   await assert.rejects(sendPost({}, { apiKey: "k", fetch: http }), /500/);
 });
+
+import { sendHeadlines, rerunProblem } from "../buffer.mjs";
+
+const quiet = { log() {}, error() {} };
+const okFetch = (calls) => async (u, init) => {
+  if (u === "https://api.buffer.com") {
+    calls.push(JSON.parse(init.body).variables.input.text);
+    return response(200, { data: { createPost: { __typename: "PostActionSuccess", post: { id: "p1" } } } });
+  }
+  return response(200);
+};
+
+test("text must end with its own post link", () => {
+  const otherPost = { ...social, text: { facebook: `Read it: ${url}-2` } };
+  assert.equal(validateSocial(otherPost, channels).length, 1);
+  const linkMidway = { ...social, text: { facebook: `${url} is worth a read` } };
+  assert.equal(validateSocial(linkMidway, channels).length, 1);
+  assert.equal(validateSocial(social, channels, "conker-season").length, 0);
+  assert.equal(validateSocial(social, channels, "some-older-post").length, 1);
+});
+
+test("closing other options failing doesn't stop the post", async () => {
+  const calls = [];
+  const result = await sendHeadlines([{ path: "blog/conker-season.social.json", social }], channels, {
+    fetch: okFetch(calls), sleep: async () => {}, apiKey: "k", logger: quiet,
+    closeOtherOptions: () => { throw new Error("gh: HTTP 502"); },
+  });
+  assert.deepEqual(calls, [social.text.facebook]);
+  assert.equal(result.failed, true);
+});
+
+test("other options are closed only after the post is queued", async () => {
+  const order = [];
+  await sendHeadlines([{ path: "blog/conker-season.social.json", social }], channels, {
+    fetch: async (u, init) => { if (u === "https://api.buffer.com") order.push("send"); return okFetch([])(u, init); },
+    sleep: async () => {}, apiKey: "k", logger: quiet,
+    closeOtherOptions: () => order.push("close"),
+  });
+  assert.deepEqual(order, ["send", "close"]);
+});
+
+test("re-running an automatic run is refused", () => {
+  assert.match(rerunProblem({ GITHUB_RUN_ATTEMPT: "2" }, false), /Run workflow/);
+  assert.equal(rerunProblem({ GITHUB_RUN_ATTEMPT: "1" }, false), null);
+  assert.equal(rerunProblem({ GITHUB_RUN_ATTEMPT: "2" }, true), null);
+  assert.equal(rerunProblem({}, false), null);
+});

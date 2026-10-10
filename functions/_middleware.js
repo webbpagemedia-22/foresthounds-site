@@ -1,10 +1,17 @@
 // Paths that live in the repository but aren't part of the website:
 // photo candidates, internal docs, the weekly headline tooling and the
 // social text that sits next to each blog post.
-const HIDDEN_PREFIXES = ["/photo-library/", "/docs/", "/automation/"];
+const HIDDEN_FOLDERS = ["/photo-library", "/docs", "/automation"];
 
 export function isHiddenPath(pathname) {
-  return HIDDEN_PREFIXES.some((prefix) => pathname.startsWith(prefix)) || pathname.endsWith(".social.json");
+  let path;
+  try {
+    // Decode and tidy first, so /%61utomation/ or //Automation/ can't slip past.
+    path = decodeURIComponent(pathname).replace(/\/+/g, "/").toLowerCase();
+  } catch {
+    return true; // Malformed encoding: no real page looks like this.
+  }
+  return HIDDEN_FOLDERS.some((folder) => path === folder || path.startsWith(`${folder}/`)) || path.endsWith(".social.json");
 }
 
 // Send visitors from the Cloudflare test address to the real domain.
