@@ -1,3 +1,19 @@
+// Paths that live in the repository but aren't part of the website:
+// photo candidates, internal docs, the weekly headline tooling and the
+// social text that sits next to each blog post.
+const HIDDEN_FOLDERS = ["/photo-library", "/docs", "/automation"];
+
+export function isHiddenPath(pathname) {
+  let path;
+  try {
+    // Decode and tidy first, so /%61utomation/ or //Automation/ can't slip past.
+    path = decodeURIComponent(pathname).replace(/\/+/g, "/").toLowerCase();
+  } catch {
+    return true; // Malformed encoding: no real page looks like this.
+  }
+  return HIDDEN_FOLDERS.some((folder) => path === folder || path.startsWith(`${folder}/`)) || path.endsWith(".social.json");
+}
+
 // Send visitors from the Cloudflare test address to the real domain.
 // Only the main test address is redirected, so branch preview links still work.
 export async function onRequest(context) {
@@ -8,8 +24,7 @@ export async function onRequest(context) {
     url.port = "";
     return Response.redirect(url.toString(), 301);
   }
-  // The photo library holds blog photo candidates; keep it off the website.
-  if (url.pathname.startsWith("/photo-library/")) {
+  if (isHiddenPath(url.pathname)) {
     return new Response("Not found", { status: 404 });
   }
   return context.next();

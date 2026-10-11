@@ -1,0 +1,46 @@
+# When a weekly headline post is merged, add it to the Buffer queue.
+# Run it by hand (Actions tab → Run workflow) to test or to retry a post.
+name: Headline to Buffer
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      file:
+        description: "Social file to send, e.g. blog/my-post.social.json"
+        required: true
+        type: string
+      dry_run:
+        description: "Dry run: show what would be sent, send nothing"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Send new headline posts to Buffer
+        if: github.event_name == 'push'
+        run: node automation/headline-to-buffer.mjs --before "${{ github.event.before }}" --after "${{ github.sha }}"
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          GH_TOKEN: ${{ github.token }}
+      - name: Send one post by hand
+        if: github.event_name == 'workflow_dispatch'
+        run: node automation/headline-to-buffer.mjs --file "$FILE" ${{ inputs.dry_run && '--dry-run' || '' }}
+        env:
+          FILE: ${{ inputs.file }}
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          GH_TOKEN: ${{ github.token }}
