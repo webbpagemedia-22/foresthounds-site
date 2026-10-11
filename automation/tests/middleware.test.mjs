@@ -18,3 +18,16 @@ test("hides encoded, doubled and upper-case variants", () => {
                    "/%E0%A4%A"])
     assert.equal(isHiddenPath(p), true, p);
 });
+
+test("hides repo-only folders and root files", () => {
+  for (const p of ["/db/schema.sql", "/db", "/.github/workflows/tests.yml", "/.github",
+                   "/CLAUDE.md", "/README.md", "/LICENSE", "/.gitignore",
+                   "/claude.md", "/%52EADME.md", "//LICENSE", "/.GitIgnore"])
+    assert.equal(isHiddenPath(p), true, p);
+});
+
+test("leaves robots.txt, sitemap.xml and look-alike paths alone", () => {
+  for (const p of ["/robots.txt", "/sitemap.xml", "/gallery", "/gallery.html", "/index.html",
+                   "/dbx", "/blog/readme-for-dog-owners", "/license-info"])
+    assert.equal(isHiddenPath(p), false, p);
+});

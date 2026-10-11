@@ -1,7 +1,9 @@
 // Paths that live in the repository but aren't part of the website:
 // photo candidates, internal docs, the weekly headline tooling and the
-// social text that sits next to each blog post.
-const HIDDEN_FOLDERS = ["/photo-library", "/docs", "/automation"];
+// social text that sits next to each blog post. Also the database schema,
+// GitHub workflows and the repo's own notes and licence.
+const HIDDEN_FOLDERS = ["/photo-library", "/docs", "/automation", "/db", "/.github"];
+const HIDDEN_FILES = ["/claude.md", "/readme.md", "/license", "/.gitignore"];
 
 export function isHiddenPath(pathname) {
   let path;
@@ -11,6 +13,7 @@ export function isHiddenPath(pathname) {
   } catch {
     return true; // Malformed encoding: no real page looks like this.
   }
+  if (HIDDEN_FILES.includes(path)) return true;
   return HIDDEN_FOLDERS.some((folder) => path === folder || path.startsWith(`${folder}/`)) || path.endsWith(".social.json");
 }
 
