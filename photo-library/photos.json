@@ -1,1 +1,56 @@
-[]
+[
+  {
+    "file": "063F7E89-2970-4137-A271-E422EA12B4E2.jpeg",
+    "description": "Lyra in her green tartan collar on a station platform beside a yellow and black train, calm and curious, grey indoor light.",
+    "alt": "A blue-fawn whippet in a green tartan collar stands on a railway platform next to a yellow train.",
+    "tags": ["lyra", "whippet", "train", "station", "travel", "town", "calm"]
+  },
+  {
+    "file": "IMG_0213.jpeg",
+    "description": "Lyra bounding towards the camera through deep copper beech leaves under a huge beech tree, peak autumn colour, bright overcast light, joyful.",
+    "alt": "A whippet runs towards the camera across a carpet of orange beech leaves beneath tall autumn trees.",
+    "tags": ["autumn", "lyra", "whippet", "woodland", "beech", "leaves", "running", "joyful"]
+  },
+  {
+    "file": "IMG_0794.jpeg",
+    "description": "Lyra lying on a grassy riverbank on a lead beside a wide, full river, bare trees on wooded hills behind, early spring, clear blue sky, relaxed.",
+    "alt": "A whippet in a red collar lies on the grass on a lead beside a wide river under a blue sky.",
+    "tags": ["spring", "lyra", "whippet", "river", "riverbank", "water", "lead", "sunny", "relaxed"]
+  },
+  {
+    "file": "IMG_1126.jpeg",
+    "description": "Studio portrait of a fawn and white whippet with a white blaze, sitting on a grey cushion in front of pink rose wallpaper, soft indoor light, alert.",
+    "alt": "Portrait of a fawn and white whippet sitting on a cushion in front of floral wallpaper.",
+    "tags": ["whippet", "portrait", "indoors", "studio", "alert"]
+  },
+  {
+    "file": "IMG_1746.jpeg",
+    "description": "Lyra stretched out on a lead on the grass in front of a ruined stone castle keep, late spring or summer, bright sun and big clouds, contented.",
+    "alt": "A whippet lies on the grass on a lead in front of the stone tower of a ruined castle.",
+    "tags": ["summer", "spring", "lyra", "whippet", "castle", "history", "lead", "sunny", "relaxed"]
+  },
+  {
+    "file": "IMG_4731.jpeg",
+    "description": "Lyra and a black and white collie-type dog standing together on a sandy path through long dry grass and scrub, late summer or early autumn, warm hazy light.",
+    "alt": "A whippet and a black and white dog stand side by side on a narrow sandy path through long grass.",
+    "tags": ["summer", "autumn", "lyra", "whippet", "collie", "two-dogs", "path", "heath", "grass", "warm"]
+  },
+  {
+    "file": "IMG_5370.jpeg",
+    "description": "Lyra walking towards the camera down a wide gravel forest track lined with golden bracken and turning trees, fallen leaves, autumn, soft overcast light.",
+    "alt": "A whippet walks along a wide gravel woodland track lined with golden bracken and autumn trees.",
+    "tags": ["autumn", "lyra", "whippet", "woodland", "forest-track", "bracken", "leaves", "overcast", "calm"]
+  },
+  {
+    "file": "photo-524_singular_display_fullPicture.jpeg",
+    "description": "A man seen from behind with a small pale whippet off lead, standing at a junction of tracks in tall conifer woodland, summer greenery, soft light.",
+    "alt": "A man in a blue top stands with a pale whippet at a crossing of paths in tall conifer woodland.",
+    "tags": ["summer", "whippet", "woodland", "conifers", "path", "walker", "calm"]
+  },
+  {
+    "file": "temp_image_55EABF2D-0893-4FD7-8346-719290740685.jpeg",
+    "description": "Lyra lying on a lawn in front of a grand golden-stone country house at sunset, late autumn, warm low light; has a text overlay reading 'Getting to work in beautiful places...'.",
+    "alt": "A whippet lies on a lawn in front of a grand stone country house lit by low autumn sun.",
+    "tags": ["autumn", "lyra", "whippet", "country-house", "parkland", "sunset", "text-overlay", "calm"]
+  }
+]
