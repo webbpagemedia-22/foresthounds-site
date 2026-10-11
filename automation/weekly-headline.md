@@ -26,6 +26,15 @@ pip install -r automation/requirements.txt
 gh label create weekly-headline --color 2E7D32 --description "Sunday headline post option" 2>/dev/null || true
 ```
 
+If the `gh` CLI isn't available or isn't logged in (as in the Claude cloud
+environment), skip the label command: the `weekly-headline` label already
+exists. Use the GitHub connector tools to open, label and edit the PRs.
+Cloudflare doesn't comment on a PR whose branch was pushed before the PR was
+opened, so if no preview comment appears, use the branch preview address:
+`https://<branch>.foresthounds-site.pages.dev`, where `<branch>` is the branch
+name lowercased, with every character that isn't a letter or digit replaced
+by `-`, cut to 28 characters.
+
 Today's date (Europe/London) is the post date for all three options. Call it
 `DATE` (yyyy-mm-dd).
 
@@ -104,10 +113,16 @@ For each story, on its own branch `headline/DATE/<slug>` from `main`:
    `index.html`.
 3. **The listing**: add the post at the top of the list in `blog/index.html`,
    in the same format as the entries already there.
-4. **The sitemap**: add `https://www.foresthounds.co.uk/blog/<slug>` to
+4. **The home page**: in `index.html`, update the "Latest from the blog"
+   block (`<figure class="photo-band" id="latest-post">`): both links go to
+   `/blog/<slug>`, the headline text, and the image `src`, `width` and
+   `height` to the post's photo. Adjust the inline `object-position` so the
+   dog or subject stays in the wide crop (check at desktop and phone width).
+   Leave the image `alt=""`, since the headline link describes it.
+5. **The sitemap**: add `https://www.foresthounds.co.uk/blog/<slug>` to
    `sitemap.xml` with `<lastmod>` DATE, matching the existing entries.
-5. **The photo**: see step 4.
-6. **The social text**: `blog/<slug>.social.json`:
+6. **The photo**: see step 4.
+7. **The social text**: `blog/<slug>.social.json`:
 
    ```json
    {

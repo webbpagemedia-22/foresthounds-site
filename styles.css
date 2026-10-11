@@ -104,6 +104,9 @@ img{max-width:100%;height:auto;display:block}
 .photo-band{margin:0;border-top:2px solid var(--ink)}
 .photo-band img{width:100%;height:clamp(20rem,50vw,52rem);object-fit:cover;object-position:55% 75%}
 .photo-band figcaption{padding:.75rem 1.5rem;font-size:.95rem;text-align:center}
+#latest-post figcaption{padding:1.25rem 1.5rem 1.5rem}
+#latest-post .post-date{display:block;margin:0 0 .35rem}
+#latest-post .latest-title{font-family:var(--display);font-size:clamp(1.3rem,3vw,1.9rem);line-height:1.2}
 .photo{margin:0}
 .photo img{border:2px solid var(--ink);border-radius:16px;width:100%}
 .photo figcaption{font-size:.95rem;padding-top:.5rem}
