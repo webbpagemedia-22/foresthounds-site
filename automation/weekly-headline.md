@@ -22,7 +22,7 @@ Follow these steps in order. Read `CLAUDE.md` first; its rules always apply.
 ## 0. Set up
 
 ```bash
-pip install -r automation/requirements.txt
+python -m pip install -r automation/requirements.txt
 gh label create weekly-headline --color 2E7D32 --description "Sunday headline post option" 2>/dev/null || true
 ```
 
@@ -42,7 +42,7 @@ Today's date (Europe/London) is the post date for all three options. Call it
 
 1. `python automation/photos.py untidied` lists photos with no
    `photo-library/photos.json` entry. If it prints nothing, skip to step 2.
-2. On a branch `photo-library/DATE`, for each listed photo:
+2. On a branch `photo-library-DATE`, for each listed photo:
    - Before cleaning, note whether it has location data:
      `python -c "import sys; sys.path.insert(0, 'automation'); import photos; from PIL import Image; print(bool(Image.open(sys.argv[1]).getexif().get_ifd(0x8825)))" photo-library/<file>`
    - Clean it. The output is always a JPEG, so a `.jpg`/`.jpeg` file keeps
@@ -60,9 +60,9 @@ Today's date (Europe/London) is the post date for all three options. Call it
    with **"⚠️ N photos had location data. It's been removed in this PR, but
    the originals are still in the repository history."**
 4. Return to `main` for step 2. For the rest of this run, read photo
-   descriptions and cleaned photos from the `photo-library/DATE` branch
-   (`git show photo-library/DATE:photo-library/photos.json`,
-   `git show photo-library/DATE:photo-library/<file> > /tmp/<file>`), since
+   descriptions and cleaned photos from the `photo-library-DATE` branch
+   (`git show photo-library-DATE:photo-library/photos.json`,
+   `git show photo-library-DATE:photo-library/<file> > /tmp/<file>`), since
    they aren't on `main` yet.
 
 ## 2. Research
@@ -143,7 +143,7 @@ For each story, on its own branch `headline/DATE/<slug>` from `main`:
 
 1. `python automation/photos.py recent` lists library photos used in the
    last 6 weeks. Don't use those.
-2. Read `photo-library/photos.json`, from the `photo-library/DATE` branch if
+2. Read `photo-library/photos.json`, from the `photo-library-DATE` branch if
    step 1 made one.
    Pick the photo whose description and tags best fit the story and season.
    Use each photo for at most one of this week's three options.
